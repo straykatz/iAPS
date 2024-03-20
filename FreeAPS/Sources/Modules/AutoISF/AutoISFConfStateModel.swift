@@ -49,7 +49,7 @@ extension AutoISFConf {
                     displayName: "Excercise toggles all autoISF adjustments off",
                     type: .boolean(keypath: \.autoISFoffSport),
                     infoText: NSLocalizedString(
-                        "Defaults to true. When true, switches off complete autoISF during high TT in excercise mode.",
+                        "Defaults to true. When true, switches off complete autoISF during high TT in exercise mode.",
                         comment: "Switch off autoISF with exercise"
                     ),
                     settable: self
@@ -136,7 +136,7 @@ extension AutoISFConf {
                     displayName: "DuraISF weight",
                     type: .decimal(keypath: \.autoISFhourlyChange),
                     infoText: NSLocalizedString(
-                        "Rate at which ISF is reduced per hour assuming BG leveel remains at double target for that time. When value = 1.0, ISF is reduced to 50% after 1 hour of BG level at 2x target.",
+                        "Rate at which ISF is reduced per hour assuming BG level remains at double target for that time. When value = 1.0, ISF is reduced to 50% after 1 hour of BG level at 2x target.",
                         comment: "autoISF HourlyMaxChange"
                     ),
                     settable: self
@@ -190,7 +190,7 @@ extension AutoISFConf {
                     type: .decimal(keypath: \.bgBrakeISFweight),
                     infoText: NSLocalizedString(
                         "Default value: 0. This is the weight applied while glucose decelerates and which weakens ISF. With 0 this contribution is effectively disabled. 0.1 might be a good starting point.",
-                        comment: "ISF decceleration weight"
+                        comment: "ISF deceleration weight"
                     ),
                     settable: self
                 )
@@ -231,7 +231,7 @@ extension AutoISFConf {
                     displayName: "SMB DeliveryRatio",
                     type: .decimal(keypath: \.smbDeliveryRatio),
                     infoText: NSLocalizedString(
-                        "Default value: 0.5 This is another key OpenAPS safety cap, and specifies what share of the total insulin required can be delivered as SMB. This is to prevent people from getting into dangerous territory by setting SMB requests from the caregivers phone at the same time. Increase this experimental value slowly and with caution. YOu can use that with autoISF to increase the SMB DR immediatly indpendant of BG if you use an Eating Soon TT (even and below 100). This SMB DR will than be used, independantly of the 3 following options, that normally superceed his setting.",
+                        "Default value: 0.5 This is another key OpenAPS safety cap, and specifies what share of the total insulin required can be delivered as SMB. This is to prevent people from getting into dangerous territory by setting SMB requests from a caregiver's phone at the same time. Increase this experimental value slowly and with caution. You can use that with autoISF to increase the SMB DR immediately - independent of BG - if you use an Eating Soon TT (even and below 100). This SMB DR will then be used, independently of the 3 following options, that normally supersede his setting.",
                         comment: "SMB DeliveryRatio"
                     ),
                     settable: self
@@ -240,7 +240,7 @@ extension AutoISFConf {
                     displayName: "SMB DeliveryRatio BG Minimum",
                     type: .decimal(keypath: \.smbDeliveryRatioMin),
                     infoText: NSLocalizedString(
-                        "Default value: 0.5 This is the lower end of a linearly increasing SMB Delivery Ratio rather than the fix value above in SMB DeliveryRatio.",
+                        "Default value: 0.5 This is the lower end of a linearly increasing SMB Delivery Ratio rather than the fixed value above in SMB DeliveryRatio.",
                         comment: "SMB DeliveryRatio Minimum"
                     ),
                     settable: self
@@ -249,7 +249,7 @@ extension AutoISFConf {
                     displayName: "SMB DeliveryRatio BG Maximum",
                     type: .decimal(keypath: \.smbDeliveryRatioMax),
                     infoText: NSLocalizedString(
-                        "Default value: 0.5 This is the higher end of a linearly increasing SMB Delivery Ratio rather than the fix value above in SMB DeliveryRatio.",
+                        "Default value: 0.5 This is the higher end of a linearly increasing SMB Delivery Ratio rather than the fixed value above in SMB DeliveryRatio.",
                         comment: "SMB DeliveryRatio Minimum"
                     ),
                     settable: self
@@ -258,7 +258,7 @@ extension AutoISFConf {
                     displayName: "SMB DeliveryRatio BG Range",
                     type: .decimal(keypath: \.smbDeliveryRatioBGrange),
                     infoText: NSLocalizedString(
-                        "Default value: 0, Sensible is bteween 40 and 120. The linearly increasing SMB delivery ratio is mapped to the glucose range [target_bg, target_bg+bg_range]. At target_bg the SMB ratio is smb_delivery_ratio_min, at target_bg+bg_range it is smb_delivery_ratio_max. With 0 the linearly increasing SMB ratio is disabled and the fix smb_delivery_ratio is used.",
+                        "Default value: 0, Sensible is between 40 and 120. The linearly increasing SMB delivery ratio is mapped to the glucose range [target_bg, target_bg+bg_range]. At target_bg the SMB ratio is smb_delivery_ratio_min, at target_bg+bg_range it is smb_delivery_ratio_max. With 0 the linearly increasing SMB ratio is disabled and the fix smb_delivery_ratio is used.",
                         comment: "SMB DeliveryRatio BG Range"
                     ),
                     settable: self
@@ -288,7 +288,7 @@ extension AutoISFConf {
                     displayName: "TempTarget Level in mg/dl for B30 to be enacted",
                     type: .decimal(keypath: \.B30iTimeTarget),
                     infoText: NSLocalizedString(
-                        "An EatingSoon TempTarget needs to be enabled to start B30 adaption. Set level for this target to be identified. Default is 90 mg/dl. If you cancel this EatingSoon TT also the B30 basal rate will stop.",
+                        "An EatingSoon TempTarget needs to be enabled to start B30 adaption. Set level for this target to be identified. Default is 90 mg/dl. If you cancel this EatingSoon TT, the B30 basal rate will also stop.",
                         comment: "EatingSoon TT level"
                     ),
                     settable: self
@@ -306,7 +306,7 @@ extension AutoISFConf {
                     displayName: "Duration of increased B30 basal rate",
                     type: .decimal(keypath: \.B30iTime),
                     infoText: NSLocalizedString(
-                        "Duration of increased basal rate that saturates the infusion site with insulin. Default 30 minutes, as in B30. The EatingSoon TT needs to be running at least for this duration, otherthise B30 will stopp after the TT runs out.",
+                        "Duration of increased basal rate that saturates the infusion site with insulin. Default 30 minutes, as in B30. The EatingSoon TT needs to be running at least for this duration, otherwise B30 will stop after the TT runs out.",
                         comment: "Duration of B30"
                     ),
                     settable: self
@@ -324,7 +324,7 @@ extension AutoISFConf {
                     displayName: "Upper BG limit in mg/dl for B30",
                     type: .decimal(keypath: \.B30upperLimit),
                     infoText: NSLocalizedString(
-                        "B30 will only run as long as BG stays underneath that level, if above regular autoISF takes over. Default is 130 mg/dl.",
+                        "B30 will only run as long as BG stays underneath that level; if above, regular autoISF takes over. Default is 130 mg/dl.",
                         comment: "Upper BG for B30"
                     ),
                     settable: self
@@ -333,7 +333,7 @@ extension AutoISFConf {
                     displayName: "Upper Delta limit in mg/dl for B30",
                     type: .decimal(keypath: \.B30upperDelta),
                     infoText: NSLocalizedString(
-                        "B30 will only run as long as BG delta stays below that level, if above regular autoISF takes over. Default is 8 mg/dl.",
+                        "B30 will only run as long as BG delta stays below that level; if above, regular autoISF takes over. Default is 8 mg/dl.",
                         comment: "Upper Delta for B30"
                     ),
                     settable: self
@@ -347,7 +347,7 @@ extension AutoISFConf {
                 ),
                 FieldSection(
                     displayName: NSLocalizedString(
-                        "Toggles & general Settings",
+                        "Toggles & General Settings",
                         comment: "Switch on/off experimental stuff"
                     ),
                     fields: xpmToogles
