@@ -23,6 +23,7 @@ extension CGM {
         @Persisted(key: "CalendarManager.currentCalendarID") var storedCalendarID: String? = nil
         @Published var cgmTransmitterDeviceAddress: String? = nil
         @Published var sgvInt: SGVInt = .sgv5min
+        @Published var useAppleHealth: Bool = false
 
         override func subscribe() {
             cgm = settingsManager.settings.cgm
@@ -30,13 +31,19 @@ extension CGM {
             calendarIDs = calendarManager.calendarIDs()
             cgmTransmitterDeviceAddress = UserDefaults.standard.cgmTransmitterDeviceAddress
             sgvInt = settingsManager.settings.sgvInt
+            useAppleHealth = settingsManager.settings.useAppleHealth
 
             subscribeSetting(\.useCalendar, on: $createCalendarEvents) { createCalendarEvents = $0 }
             subscribeSetting(\.displayCalendarIOBandCOB, on: $displayCalendarIOBandCOB) { displayCalendarIOBandCOB = $0 }
             subscribeSetting(\.displayCalendarEmojis, on: $displayCalendarEmojis) { displayCalendarEmojis = $0 }
             subscribeSetting(\.smoothGlucose, on: $smoothGlucose, initial: { smoothGlucose = $0 })
             subscribeSetting(\.sgvInt, on: $sgvInt) { sgvInt = $0 }
+
+            // resett sgvInterval to 4.5 min if  a not 1min-capable CGM is selected
             if cgm != .glucoseDirect, cgm != .simulator, cgm != .libreTransmitter { sgvInt = .sgv5min }
+
+            // deactivate Apple Health if using 1min glucose values, not stable
+            if sgvInt == .sgv1min { useAppleHealth = false }
 
             $cgm
                 .removeDuplicates()

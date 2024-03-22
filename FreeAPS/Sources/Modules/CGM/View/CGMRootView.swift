@@ -98,15 +98,19 @@ extension CGM {
                     }
 
                     Section(header: Text("Experimental")) {
-                        Toggle("Smooth Glucose Value", isOn: $state.smoothGlucose)
-                        if state.cgm == .glucoseDirect || state.cgm == .simulator || state.cgm == .libreTransmitter {
-                            Picker(
-                                selection: $state.sgvInt,
-                                label: Text("SGV Interval")
-                            ) {
-                                ForEach(SGVInt.allCases) { selection in
-                                    Text(selection.displayName).tag(selection)
+                        VStack {
+                            Toggle("Smooth Glucose Value", isOn: $state.smoothGlucose)
+                            if state.cgm == .glucoseDirect || state.cgm == .simulator || state.cgm == .libreTransmitter {
+                                Picker(
+                                    selection: $state.sgvInt,
+                                    label: Text("SGV Interval")
+                                ) {
+                                    ForEach(SGVInt.allCases) { selection in
+                                        Text(selection.displayName).tag(selection)
+                                    }
                                 }
+                                Text("Apple Health will be force deactivated if 1min glucose values are used!")
+                                    .font(.caption).italic()
                             }
                         }
                     }
