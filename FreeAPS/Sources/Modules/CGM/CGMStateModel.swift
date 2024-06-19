@@ -6,6 +6,7 @@ import SwiftUI
 
 extension CGM {
     final class StateModel: BaseStateModel<Provider> {
+        private(set) var preferences = Preferences()
         @Injected() var libreSource: LibreTransmitterSource!
         @Injected() var cgmManager: FetchGlucoseManager!
         @Injected() var calendarManager: CalendarManager!
@@ -24,14 +25,19 @@ extension CGM {
         @Published var cgmTransmitterDeviceAddress: String? = nil
         @Published var sgvInt: SGVInt = .sgv5min
         @Published var useAppleHealth: Bool = false
+        @Published var smbDeliveryRatio: Decimal = 0.5
+        @Published var smbInterval: Decimal = 3
 
         override func subscribe() {
+            preferences = settingsManager.preferences
             cgm = settingsManager.settings.cgm
             currentCalendarID = storedCalendarID ?? ""
             calendarIDs = calendarManager.calendarIDs()
             cgmTransmitterDeviceAddress = UserDefaults.standard.cgmTransmitterDeviceAddress
             sgvInt = settingsManager.settings.sgvInt
             useAppleHealth = settingsManager.settings.useAppleHealth
+            smbDeliveryRatio = preferences.smbDeliveryRatio
+            smbInterval = preferences.smbInterval
 
             subscribeSetting(\.useCalendar, on: $createCalendarEvents) { createCalendarEvents = $0 }
             subscribeSetting(\.displayCalendarIOBandCOB, on: $displayCalendarIOBandCOB) { displayCalendarIOBandCOB = $0 }
@@ -112,5 +118,9 @@ extension CGM.StateModel: CGMManagerOnboardingDelegate {
 
     func cgmManagerOnboarding(didOnboardCGMManager _: LoopKitUI.CGMManagerUI) {
         // nothing to do ?
+    }
+
+    func save() {
+        provider.savePreferences(preferences)
     }
 }

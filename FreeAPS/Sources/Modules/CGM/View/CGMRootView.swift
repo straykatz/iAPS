@@ -8,6 +8,12 @@ extension CGM {
         @StateObject var state = StateModel()
         @State private var setupCGM = false
 
+        @State var isPresented = false
+        @State var description = Text("")
+        @State var descriptionHeader = Text("")
+        @State var scrollView = false
+        @State var graphics: (any View)?
+
         @Environment(\.colorScheme) var colorScheme
         var color: LinearGradient {
             colorScheme == .dark ? LinearGradient(
@@ -27,6 +33,12 @@ extension CGM {
         }
 
         // @AppStorage(UserDefaults.BTKey.cgmTransmitterDeviceAddress.rawValue) private var cgmTransmitterDeviceAddress: String? = nil
+
+        private var formatter: NumberFormatter {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            return formatter
+        }
 
         var body: some View {
             NavigationView {
@@ -114,6 +126,28 @@ extension CGM {
                             }
                         }
                     }
+
+                    if state.sgvInt == .sgv1min {
+                        Section(header: Text("1min Settings")) {
+                            VStack {
+                                Text(
+                                    "With 1min glucose values Loops will also be calculated every minute. Seriously consider adjusting down the SMB delivery Ratio as now instead of just 1 SMB every 5min, potentially 5 SMB's can be enacted. This would require to set the SMB interval to 1min."
+                                )
+                            }
+                            HStack {
+                                Text("SMB Interval")
+                                    .onTapGesture {
+                                        info(
+                                            header: "Adjust SMB Interval:",
+                                            body: "For 5min CGM values use a 3-5min SMB Interval, for 1min CGM Values use 1min",
+                                            useGraphics: nil
+                                        )
+                                    }
+                                Spacer()
+                                DecimalTextField("0", value: $state.smbInterval, formatter: formatter)
+                            }
+                        }
+                    }
                 }
                 .scrollContentBackground(.hidden).background(color)
                 .onAppear(perform: configureView)
@@ -143,6 +177,44 @@ extension CGM {
                 .onChange(of: state.setupCGM) { setupCGM in
                     self.setupCGM = setupCGM
                 }
+            }
+        }
+
+        func info(header: String, body: String, useGraphics: (any View)?) {
+            isPresented.toggle()
+            description = Text(NSLocalizedString(body, comment: "Dynamic ISF Setting"))
+            descriptionHeader = Text(NSLocalizedString(header, comment: "Dynamic ISF Setting Title"))
+            graphics = useGraphics
+        }
+
+        var info: some View {
+            VStack(spacing: 20) {
+                descriptionHeader.font(.title2).bold()
+                description.font(.body)
+            }
+        }
+
+        func infoView() -> some View {
+            info
+                .formatDescription()
+                .onTapGesture {
+                    isPresented.toggle()
+                }
+        }
+
+        func infoScrollView() -> some View {
+            ScrollView {
+                VStack(spacing: 20) {
+                    info
+                    if let view = graphics {
+                        view.asAny()
+                    }
+                }
+            }
+            .formatDescription()
+            .onTapGesture {
+                isPresented.toggle()
+                scrollView = false
             }
         }
     }

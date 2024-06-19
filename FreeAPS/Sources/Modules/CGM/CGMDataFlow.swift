@@ -6,4 +6,6 @@ enum cgmConfig {
     enum Config {}
 }
 
-protocol CGMProvider: Provider {}
+protocol CGMProvider: Provider {
+    var preferences: Preferences { get }
+}
