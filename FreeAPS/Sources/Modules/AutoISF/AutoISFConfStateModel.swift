@@ -250,7 +250,7 @@ extension AutoISFConf {
                     type: .decimal(keypath: \.smbDeliveryRatioMax),
                     infoText: NSLocalizedString(
                         "Default value: 0.5 This is the higher end of a linearly increasing SMB Delivery Ratio rather than the fix value above in SMB DeliveryRatio.",
-                        comment: "SMB DeliveryRatio Minimum"
+                        comment: "SMB DeliveryRatio Maximum"
                     ),
                     settable: self
                 ),
@@ -258,7 +258,7 @@ extension AutoISFConf {
                     displayName: "SMB DeliveryRatio BG Range",
                     type: .decimal(keypath: \.smbDeliveryRatioBGrange),
                     infoText: NSLocalizedString(
-                        "Default value: 0, Sensible is bteween 40 and 120. The linearly increasing SMB delivery ratio is mapped to the glucose range [target_bg, target_bg+bg_range]. At target_bg the SMB ratio is smb_delivery_ratio_min, at target_bg+bg_range it is smb_delivery_ratio_max. With 0 the linearly increasing SMB ratio is disabled and the fix smb_delivery_ratio is used.",
+                        "Default value: 0, Sensible is between 40 and 120. The linearly increasing SMB delivery ratio is mapped to the glucose range [target_bg, target_bg+bg_range]. At target_bg the SMB ratio is smb_delivery_ratio_min, at target_bg+bg_range it is smb_delivery_ratio_max. With 0 the linearly increasing SMB ratio is disabled and the fix smb_delivery_ratio is used.",
                         comment: "SMB DeliveryRatio BG Range"
                     ),
                     settable: self

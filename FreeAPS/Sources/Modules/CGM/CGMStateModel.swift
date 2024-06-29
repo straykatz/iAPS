@@ -6,7 +6,8 @@ import SwiftUI
 
 extension CGM {
     final class StateModel: BaseStateModel<Provider> {
-        private(set) var preferences = Preferences()
+        @Injected() var settings: SettingsManager!
+        @Injected() var storage: FileStorage!
         @Injected() var libreSource: LibreTransmitterSource!
         @Injected() var cgmManager: FetchGlucoseManager!
         @Injected() var calendarManager: CalendarManager!
@@ -27,9 +28,15 @@ extension CGM {
         @Published var useAppleHealth: Bool = false
         @Published var smbDeliveryRatio: Decimal = 0.5
         @Published var smbInterval: Decimal = 3
+        @Published var smbDeliveryRatioMin: Decimal = 0.6
+        @Published var smbDeliveryRatioMax: Decimal = 0.9
+        @Published var smbDeliveryRatioBGrange: Decimal = 0
+
+        var preferences: Preferences {
+            settingsManager.preferences
+        }
 
         override func subscribe() {
-            preferences = settingsManager.preferences
             cgm = settingsManager.settings.cgm
             currentCalendarID = storedCalendarID ?? ""
             calendarIDs = calendarManager.calendarIDs()
@@ -38,6 +45,9 @@ extension CGM {
             useAppleHealth = settingsManager.settings.useAppleHealth
             smbDeliveryRatio = preferences.smbDeliveryRatio
             smbInterval = preferences.smbInterval
+            smbDeliveryRatioMin = preferences.smbDeliveryRatioMin
+            smbDeliveryRatioMax = preferences.smbDeliveryRatioMax
+            smbDeliveryRatioBGrange = preferences.smbDeliveryRatioBGrange
 
             subscribeSetting(\.useCalendar, on: $createCalendarEvents) { createCalendarEvents = $0 }
             subscribeSetting(\.displayCalendarIOBandCOB, on: $displayCalendarIOBandCOB) { displayCalendarIOBandCOB = $0 }
@@ -87,6 +97,26 @@ extension CGM {
                     self?.calendarManager.currentCalendarID = id
                 }
                 .store(in: &lifetime)
+        }
+
+        var unChanged: Bool {
+            preferences.smbInterval == smbInterval &&
+                preferences.smbDeliveryRatio == smbDeliveryRatio &&
+                preferences.smbDeliveryRatioMin == smbDeliveryRatioMin &&
+                preferences.smbDeliveryRatioMax == smbDeliveryRatioMax &&
+                preferences.smbDeliveryRatioBGrange == smbDeliveryRatioBGrange
+        }
+
+        func saveIfChanged() {
+            if !unChanged {
+                var newSettings = storage.retrieve(OpenAPS.Settings.preferences, as: Preferences.self) ?? Preferences()
+                newSettings.smbInterval = smbInterval
+                newSettings.smbDeliveryRatio = smbDeliveryRatio
+                newSettings.smbDeliveryRatioMin = smbDeliveryRatioMin
+                newSettings.smbDeliveryRatioMax = smbDeliveryRatioMax
+                newSettings.smbDeliveryRatioBGrange = smbDeliveryRatioBGrange
+                storage.save(newSettings, as: OpenAPS.Settings.preferences)
+            }
         }
     }
 }
